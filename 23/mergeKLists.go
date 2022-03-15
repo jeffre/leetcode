@@ -9,16 +9,6 @@ func mergeKLists(lists []*ListNode) *ListNode {
 
 	dummy := &ListNode{0, nil}
 
-	// Early return if no lists were provided
-	if len(lists) == 0 {
-		return dummy.Next
-	}
-
-	// Early return if 1 list was provided
-	if len(lists) == 1 {
-		return lists[0]
-	}
-
 	helper(lists, dummy)
 
 	return dummy.Next
@@ -43,10 +33,11 @@ func helper(lists []*ListNode, result *ListNode) {
 
 	switch len(lists) {
 	case 0:
-		// Short circuit if all lists have been fully processed
+		// All lists have been fully processed
 		return
 	case 1:
-		// Short circuit if only one list is left (and inherit all nodes)
+		// All remaining nodes are in the same list so we can inherit the
+		// parent and be done
 		result.Next = lists[0]
 		return
 	}
