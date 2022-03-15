@@ -16,6 +16,12 @@ var cases = []struct {
 	},
 	{
 		given: []*ListNode{
+			{1, &ListNode{4, &ListNode{5, nil}}},
+		},
+		want: &ListNode{1, &ListNode{4, &ListNode{5, nil}}},
+	},
+	{
+		given: []*ListNode{
 			nil,
 			nil,
 			{1, &ListNode{4, &ListNode{5, nil}}},
