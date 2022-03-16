@@ -35,10 +35,6 @@ var cases = []struct {
 	},
 }
 
-var (
-	answer = 4
-)
-
 func TestCases(t *testing.T) {
 	for _, tt := range cases {
 		t.Run(fmt.Sprint(tt.given), func(t *testing.T) {
@@ -58,14 +54,4 @@ func BenchmarkCases(b *testing.B) {
 			guessNumber(tt.given)
 		}
 	}
-}
-
-func guess(num int) int {
-
-	if num < answer {
-		return 1
-	} else if num > answer {
-		return -1
-	}
-	return 0
 }
