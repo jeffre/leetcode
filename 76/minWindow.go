@@ -23,15 +23,17 @@ func minWindow(s string, t string) string {
 	// Iterate through source string
 	for left < len(s) {
 
-		// If there is an another character (right+1) in source string
-		// AND not enough matches have been found
+		// IF there is an another character (right+1) available in 's' string
+		// AND not enough matches have been found yet
 		if right+1 < len(s) && matches < len(t) {
 
-			// Increment count of occurrences of this source character
+			// Extend right side of window
+
+			// Increment window's counter for this new character
 			windowFreq[s[right+1]-'A']++
 
-			// If this new character is needed by the target (ie occurs less than or equally in source)
-			// than increment 'matches'
+			// IF the new character is significant to the target (occurs less than or equally in window)
+			// THEN increment 'matches'
 			if windowFreq[s[right+1]-'A'] <= targetFreq[s[right+1]-'A'] {
 				matches++
 			}
@@ -41,7 +43,7 @@ func minWindow(s string, t string) string {
 		} else {
 
 			// IF all characters in 't' have been matched
-			// AND this window is better than previous bests
+			// AND window is smaller than previous bests
 			// THEN record a new best
 			if matches == len(t) && right-left+1 < bestLen {
 				bestLen = right - left + 1
@@ -49,13 +51,15 @@ func minWindow(s string, t string) string {
 				bestRight = right
 			}
 
+			// Retract left side of window
+
 			// IF the character on the left of the current window was counted in 'matches'
 			// THEN uncount it before 'left' increments forward
 			if windowFreq[s[left]-'A'] == targetFreq[s[left]-'A'] {
 				matches--
 			}
 
-			// Remove this left character from count of occurrences in source string
+			// De-increment window's counter for this character
 			windowFreq[s[left]-'A']--
 
 			left++
