@@ -21,7 +21,7 @@ func reverseKGroup(head *ListNode, k int) *ListNode {
 
 	start := head
 
-	// Iterate ListNode to k times
+	// Iterate head k times
 	for i := 0; i < k; i++ {
 
 		// If we run out of nodes return as-is
@@ -31,18 +31,18 @@ func reverseKGroup(head *ListNode, k int) *ListNode {
 		head = head.Next
 	}
 
-	// Create mini-list of reversed-order nodes
+	// Create subset of ListNodes in reverse order
 	newHead := reverseGroup(start, head)
 
 	// "start" is now the end of the mini-list. So we do another round of
-	// reverseKGroup to set its Next value.
+	// reverseKGroup to set its Next value
 	start.Next = reverseKGroup(head, k)
 
 	return newHead
 }
 
 // reverseGroup takes two ListNodes and iterates the first one until it matches
-// the second one.
+// the second one and returns the nodes in reverse order
 func reverseGroup(start, end *ListNode) *ListNode {
 	var newHead, tempHead *ListNode
 	for start != end {
