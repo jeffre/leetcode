@@ -21,12 +21,6 @@ var cases = []struct {
 		given: given{dividend: 7, divisor: -3},
 		want:  -2,
 	}, {
-		given: given{dividend: -7, divisor: 3},
-		want:  -2,
-	}, {
-		given: given{dividend: -7, divisor: -3},
-		want:  2,
-	}, {
 		given: given{dividend: 1, divisor: 1},
 		want:  1,
 	}, {
@@ -49,7 +43,7 @@ func TestDivide(t *testing.T) {
 	}
 }
 
-func BenchmarkCases(b *testing.B) {
+func BenchmarkDivide(b *testing.B) {
 	for n := 0; n < b.N; n++ {
 		for _, tt := range cases {
 			divide(tt.given.dividend, tt.given.divisor)
