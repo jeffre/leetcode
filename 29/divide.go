@@ -36,12 +36,13 @@ func divide(dividend int, divisor int) int {
 		divisor = 0 - divisor
 	}
 
-	// Exponentially grow divisor until it nearly exceeds dividend call this
-	// "accum" and track the exponent that got it there "exponent".
+	// Exponentially grow divisor until it nearly exceeds dividend; call this
+	// "accum". And record the mutliplicative difference from divisor to
+	// "accum"; call this "multiplier"
 	accum := divisor
-	exponent := 1
+	multiplier := 1
 	for accum >= math.MinInt32>>1 && dividend <= accum+accum {
-		exponent += exponent
+		multiplier += multiplier
 		accum += accum
 	}
 
@@ -50,10 +51,10 @@ func divide(dividend int, divisor int) int {
 	for dividend <= divisor {
 		if dividend <= accum {
 			dividend -= accum
-			quotient += exponent
+			quotient += multiplier
 		}
 		accum >>= 1
-		exponent >>= 1
+		multiplier >>= 1
 	}
 
 	if !positive {
