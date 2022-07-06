@@ -24,7 +24,7 @@ func nextPermutation(nums []int) {
 	// Edge cases
 	switch idx {
 	case -1:
-		// No more permutations are left; Restart it from the bottom
+		// No more permutations are possible; Restart
 		sort.IntSlice(nums).Sort()
 		return
 
@@ -36,7 +36,7 @@ func nextPermutation(nums []int) {
 
 	// At this point we know nums[idx+2] exists
 
-	// Of the values to the right of "idx", find the index of value that is
+	// Of the values to the right of idx, find the index of value that is
 	// larger than num[idx] but smaller than the rest
 	minIndex := idx + 1
 	minNum := nums[minIndex]
