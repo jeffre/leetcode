@@ -2,8 +2,8 @@ package leetcode438
 
 type charCount map[byte]int
 
-func (c *charCount) has(c2 charCount) bool {
-	for b, i := range *c {
+func (c charCount) has(c2 charCount) bool {
+	for b, i := range c {
 		if c2[b] != i {
 			return false
 		}
