@@ -13,7 +13,7 @@ func circularArrayLoop(nums []int) bool {
 		}
 		visited[i] = true
 
-		// Iterate until a cycle is found
+		// Use fast and slow iterators to detect the cycle
 		slow, fast := i, i
 		for {
 			slow = next(nums, slow)
@@ -29,8 +29,8 @@ func circularArrayLoop(nums []int) bool {
 			}
 		}
 
-		// Find start of cycle by interating another time from the starting
-		// position until it meets where slow/fast first met.
+		// Find cycle's starting point by walking in another iterator from the
+		// same position that slow/fast started at.
 		start := i
 		for start != slow {
 			start = next(nums, start)
@@ -47,7 +47,7 @@ func circularArrayLoop(nums []int) bool {
 		n := next(nums, start)
 		for n != start {
 			if (nums[n] > 0) != isForward {
-				// Abort cycle prematurely if direction changed
+				// Prematurely stop iterating n if direction changes
 				break
 			}
 			n = next(nums, n)
