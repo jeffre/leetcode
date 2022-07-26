@@ -2,83 +2,82 @@ package leetcode23
 
 import (
 	"fmt"
-	"reflect"
 	"testing"
 )
 
-var cases = []struct {
+type test struct {
+	name  string
 	given []*ListNode
 	want  *ListNode
-}{
-	{
-		given: []*ListNode{},
-		want:  nil,
-	},
-	{
-		given: []*ListNode{
-			{1, &ListNode{4, &ListNode{5, nil}}},
-		},
-		want: &ListNode{1, &ListNode{4, &ListNode{5, nil}}},
-	},
-	{
-		given: []*ListNode{
-			nil,
-			nil,
-			{1, &ListNode{4, &ListNode{5, nil}}},
-		},
-		want: &ListNode{1, &ListNode{4, &ListNode{5, nil}}},
-	},
-	{
-		given: []*ListNode{
-			nil,
-			{6, nil},
-			{1, &ListNode{4, &ListNode{5, nil}}},
-		},
-		want: &ListNode{1, &ListNode{4, &ListNode{5, &ListNode{6, nil}}}},
-	},
-	{
-		given: []*ListNode{
-			{1, &ListNode{4, &ListNode{5, nil}}},
-			{1, &ListNode{3, &ListNode{4, nil}}},
-			{2, &ListNode{6, nil}},
-		},
-		want: &ListNode{1, &ListNode{1, &ListNode{2, &ListNode{3, &ListNode{4, &ListNode{4, &ListNode{5, &ListNode{6, nil}}}}}}}},
-	},
-	{
-		given: []*ListNode{
-			{-1, &ListNode{1, nil}},
-			{-3, &ListNode{1, &ListNode{4, nil}}},
-			{-2, &ListNode{-1, &ListNode{0, &ListNode{2, nil}}}},
-		},
-		want: &ListNode{-3, &ListNode{-2, &ListNode{-1, &ListNode{-1, &ListNode{0, &ListNode{1, &ListNode{1, &ListNode{2, &ListNode{4, nil}}}}}}}}},
-	},
 }
 
-/*
-{-1, &ListNode{1, nil}},
-{-3, &ListNode{1, &ListNode{4, nil}}},
-{-2, &ListNode{-1, &ListNode{0, &ListNode{2, nil}}}},
-take -3
+func getTests() (tests []test) {
 
-{-1, &ListNode{1, nil}},
-{1,  &ListNode{4, nil}},
-{-2, &ListNode{-1, &ListNode{0, &ListNode{2, nil}}}},
-take -2
+	tests = append(tests, test{
+		name:  "0 nodes",
+		given: []*ListNode{},
+		want:  nil,
+	})
 
-{-1, &ListNode{1, nil}},
-{1,  &ListNode{4, nil}},
-{-1, &ListNode{0, &ListNode{2, nil}}},
+	tests = append(tests, test{
+		name: "1 listnode",
+		given: []*ListNode{
+			intsToList([]int{1, 4, 5}),
+		},
+		want: intsToList([]int{1, 4, 5}),
+	})
 
-*/
+	tests = append(tests, test{
+		name: "3 listnodes",
+		given: []*ListNode{
+			nil,
+			nil,
+			intsToList([]int{1, 4, 5}),
+		},
+		want: intsToList([]int{1, 4, 5}),
+	})
 
-func TestMergeTwoLists(t *testing.T) {
-	for _, tt := range cases {
-		t.Run(fmt.Sprint(tt.given), func(t *testing.T) {
+	tests = append(tests, test{
+		name: "simple-merge",
+		given: []*ListNode{
+			nil,
+			intsToList([]int{6}),
+			intsToList([]int{1, 4, 5}),
+		},
+		want: intsToList([]int{1, 4, 5, 6}),
+	})
+
+	tests = append(tests, test{
+		name: "triple-merge",
+		given: []*ListNode{
+			intsToList([]int{1, 4, 5}),
+			intsToList([]int{1, 3, 4}),
+			intsToList([]int{2, 6}),
+		},
+		want: intsToList([]int{1, 1, 2, 3, 4, 4, 5, 6}),
+	})
+
+	tests = append(tests, test{
+		name: "negative-vals",
+		given: []*ListNode{
+			intsToList([]int{-1, 1}),
+			intsToList([]int{-3, 1, 4}),
+			intsToList([]int{-2, -1, 0, 2}),
+		},
+		want: intsToList([]int{-3, -2, -1, -1, 0, 1, 1, 2, 4}),
+	})
+
+	return tests
+}
+
+func TestMergeKLists(t *testing.T) {
+	for _, tt := range getTests() {
+		t.Run(tt.name, func(t *testing.T) {
+
 			got := mergeKLists(tt.given)
-			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("\ngiven: %#v\ngot:   %#v\nwant:  %#v\n", tt.given, got, tt.want)
-				t.Errorf("got  %+v", ListToInts(got))
-				t.Errorf("want %+v", ListToInts(tt.want))
+			if !assertIdentical(t, got, tt.want) {
+				t.Errorf("\ngiven: %v\ngot:   %v\nwant:  %v\n",
+					listsToInts(tt.given), listToInts(got), listToInts(tt.want))
 			}
 		})
 	}
@@ -86,25 +85,41 @@ func TestMergeTwoLists(t *testing.T) {
 
 func BenchmarkCases(b *testing.B) {
 	for n := 0; n < b.N; n++ {
-		for _, tt := range cases {
+		for _, tt := range getTests() {
 			mergeKLists(tt.given)
 		}
 	}
 }
 
-/*
-	Helpers for converting leetcode's sample cases into real linked lists
-*/
+func assertIdentical(t testing.TB, a, b *ListNode) bool {
+	t.Helper()
+	for a != nil && b != nil {
+		if a.Val != b.Val {
+			return false
+		}
+		a = a.Next
+		b = b.Next
+	}
+	return a == nil && b == nil
+}
 
-// ListToInts convert List to []int
-func ListToInts(head *ListNode) (result []int) {
+func listsToInts(nodes []*ListNode) [][]int {
+	result := make([][]int, len(nodes))
+
+	for i, n := range nodes {
+		result[i] = listToInts(n)
+	}
+	return result
+}
+
+func listToInts(head *ListNode) (result []int) {
 	limit := 100
-	times := 0
 
 	for head != nil {
-		times++
-		if times > limit {
-			msg := fmt.Sprintf("The chain depth exceeds %d.", limit)
+		limit--
+		if limit < 0 {
+			msg := fmt.Sprintf("The chain depth exceeds %d. This may be the "+
+				"result of an infinite loop.", limit)
 			panic(msg)
 		}
 
@@ -115,17 +130,16 @@ func ListToInts(head *ListNode) (result []int) {
 	return result
 }
 
-// IntsToList convert []int to List
-func IntsToList(nums []int) *ListNode {
+func intsToList(nums []int) *ListNode {
 	if len(nums) == 0 {
 		return nil
 	}
 
-	dummy := &ListNode{}
-	cur := dummy
+	sentinel := &ListNode{}
+	cur := sentinel
 	for _, v := range nums {
 		cur.Next = &ListNode{Val: v}
 		cur = cur.Next
 	}
-	return dummy.Next
+	return sentinel.Next
 }

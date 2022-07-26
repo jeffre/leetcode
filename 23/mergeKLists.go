@@ -7,11 +7,11 @@ type ListNode struct {
 
 func mergeKLists(lists []*ListNode) *ListNode {
 
-	dummy := &ListNode{0, nil}
+	sentinel := &ListNode{0, nil}
 
-	helper(lists, dummy)
+	helper(lists, sentinel)
 
-	return dummy.Next
+	return sentinel.Next
 }
 
 func helper(lists []*ListNode, result *ListNode) {
