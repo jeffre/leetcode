@@ -77,7 +77,7 @@ func TestCases(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 
 			got := mergeKLists(tt.given)
-			if !assertIdentical(t, got, tt.want) {
+			if !assertIdenticalListNode(t, got, tt.want) {
 				t.Errorf("\ngiven: %v\ngot:   %v\nwant:  %v\n",
 					listsToInts(tt.given), listToInts(got), listToInts(tt.want))
 			}
@@ -93,7 +93,7 @@ func BenchmarkCases(b *testing.B) {
 	}
 }
 
-func assertIdentical(t testing.TB, a, b *ListNode) bool {
+func assertIdenticalListNode(t testing.TB, a, b *ListNode) bool {
 	t.Helper()
 	for a != nil && b != nil {
 		if a.Val != b.Val {
