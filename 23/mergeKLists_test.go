@@ -11,66 +11,68 @@ type test struct {
 	want  *ListNode
 }
 
-func getTests() (tests []test) {
+func getTests() []test {
 
-	tests = append(tests, test{
-		name:  "0 nodes",
-		given: []*ListNode{},
-		want:  nil,
-	})
-
-	tests = append(tests, test{
-		name: "1 listnode",
-		given: []*ListNode{
-			intsToList([]int{1, 4, 5}),
+	return []test{
+		{
+			name:  "0 nodes",
+			given: []*ListNode{},
+			want:  nil,
+		}, {
+			name: "1 listnode",
+			given: []*ListNode{
+				intsToList([]int{1, 4, 5}),
+			},
+			want: intsToList([]int{1, 4, 5}),
+		}, {
+			name: "3 listnodes",
+			given: []*ListNode{
+				nil,
+				nil,
+				intsToList([]int{1, 4, 5}),
+			},
+			want: intsToList([]int{1, 4, 5}),
+		}, {
+			name: "simple-merge",
+			given: []*ListNode{
+				nil,
+				intsToList([]int{6}),
+				intsToList([]int{1, 4, 5}),
+			},
+			want: intsToList([]int{1, 4, 5, 6}),
+		}, {
+			name: "triple-merge",
+			given: []*ListNode{
+				intsToList([]int{1, 4, 5}),
+				intsToList([]int{1, 3, 4}),
+				intsToList([]int{2, 6}),
+			},
+			want: intsToList([]int{1, 1, 2, 3, 4, 4, 5, 6}),
+		}, {
+			name: "large-merge",
+			given: []*ListNode{
+				intsToList([]int{1, 4, 5}),
+				intsToList([]int{1, 3, 4}),
+				intsToList([]int{2, 6, 12, 33, 45}),
+				intsToList([]int{2, 61, 63, 64, 66}),
+				intsToList([]int{2, 6, 675, 676, 6657}),
+				intsToList([]int{2, 6, 15, 17, 17}),
+			},
+			want: intsToList([]int{1, 1, 2, 2, 2, 2, 3, 4, 4, 5, 6, 6, 6, 12, 15,
+				17, 17, 33, 45, 61, 63, 64, 66, 675, 676, 6657}),
+		}, {
+			name: "negative-vals",
+			given: []*ListNode{
+				intsToList([]int{-1, 1}),
+				intsToList([]int{-3, 1, 4}),
+				intsToList([]int{-2, -1, 0, 2}),
+			},
+			want: intsToList([]int{-3, -2, -1, -1, 0, 1, 1, 2, 4}),
 		},
-		want: intsToList([]int{1, 4, 5}),
-	})
-
-	tests = append(tests, test{
-		name: "3 listnodes",
-		given: []*ListNode{
-			nil,
-			nil,
-			intsToList([]int{1, 4, 5}),
-		},
-		want: intsToList([]int{1, 4, 5}),
-	})
-
-	tests = append(tests, test{
-		name: "simple-merge",
-		given: []*ListNode{
-			nil,
-			intsToList([]int{6}),
-			intsToList([]int{1, 4, 5}),
-		},
-		want: intsToList([]int{1, 4, 5, 6}),
-	})
-
-	tests = append(tests, test{
-		name: "triple-merge",
-		given: []*ListNode{
-			intsToList([]int{1, 4, 5}),
-			intsToList([]int{1, 3, 4}),
-			intsToList([]int{2, 6}),
-		},
-		want: intsToList([]int{1, 1, 2, 3, 4, 4, 5, 6}),
-	})
-
-	tests = append(tests, test{
-		name: "negative-vals",
-		given: []*ListNode{
-			intsToList([]int{-1, 1}),
-			intsToList([]int{-3, 1, 4}),
-			intsToList([]int{-2, -1, 0, 2}),
-		},
-		want: intsToList([]int{-3, -2, -1, -1, 0, 1, 1, 2, 4}),
-	})
-
-	return tests
+	}
 }
 
-func TestMergeKLists(t *testing.T) {
+func TestCases(t *testing.T) {
 	for _, tt := range getTests() {
 		t.Run(tt.name, func(t *testing.T) {
 
