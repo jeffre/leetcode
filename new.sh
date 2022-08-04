@@ -35,8 +35,8 @@ package leetcode$id
 import "testing"
 
 type given struct {
-	nums1 []int
-	nums2 []int
+	nums   []int
+	target int
 }
 
 var cases = []struct {
@@ -47,11 +47,11 @@ var cases = []struct {
 	{
 		name: "example1",
 		given: given{
-			nums1: []int{1, 2, 2, 1},
-			nums2: []int{2, 2},
+			nums:   []int{4, 5},
+			target: 0,
 		},
-		want: 2,
-	}, 
+		want: 4,
+	},
 }
 
 func TestCases(t *testing.T) {
@@ -74,3 +74,7 @@ func BenchmarkCases(b *testing.B) {
 }
 
 EOF
+
+
+## Open new files for editing
+code "$go" "$gotest"
