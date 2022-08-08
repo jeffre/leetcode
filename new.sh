@@ -18,7 +18,7 @@ test -f "$go" || cat <<EOF > "${go}"
 package leetcode$id
 
 /*
-	Challenge Description:
+	Challenge Description: 
 */
 
 func $func() {
