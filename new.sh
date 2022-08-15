@@ -81,7 +81,7 @@ func TestCases(t *testing.T) {
 func BenchmarkCases(b *testing.B) {
 	for n := 0; n < b.N; n++ {
 		for _, tt := range tests {
-			runTest(tt.given)
+			tt.run()
 		}
 	}
 }
