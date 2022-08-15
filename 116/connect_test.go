@@ -47,6 +47,15 @@ func init() {
 	tests = append(tests, test{"example1", g, w})
 }
 
+// Add example2
+func init() {
+	tests = append(tests, test{
+		"example2",
+		given{},
+		result{},
+	})
+}
+
 type test struct {
 	name  string
 	given given
