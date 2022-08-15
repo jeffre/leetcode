@@ -39,25 +39,36 @@ type given struct {
 	target int
 }
 
-var cases = []struct {
-	name  string
-	given given
-	want  int
-}{
+type want struct {
+	int
+}
+
+func runTest(given given) want {
+	got := ${func}(given.nums, given.target)
+	return want{got}
+}
+
+var tests = []test {
 	{
-		name: "example1",
-		given: given{
+		"example1",
+		given{
 			nums:   []int{4, 5},
 			target: 0,
 		},
-		want: 4,
+		want{4},
 	},
+}
+
+type test struct {
+	name  string
+	given given
+	want  want
 }
 
 func TestCases(t *testing.T) {
 	for _, tt := range cases {
 		t.Run(tt.name, func(t *testing.T) {
-			got := $func(tt.given)
+			got := runTest(tt.given)
 			if got != tt.want {
 				t.Errorf("\ngot:   %#v\nwant:  %#v\n", got, tt.want)
 			}
@@ -68,7 +79,7 @@ func TestCases(t *testing.T) {
 func BenchmarkCases(b *testing.B) {
 	for n := 0; n < b.N; n++ {
 		for _, tt := range cases {
-			$func(tt.given)
+			runTest(tt.given)
 		}
 	}
 }
