@@ -66,7 +66,7 @@ type test struct {
 }
 
 func TestCases(t *testing.T) {
-	for _, tt := range cases {
+	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got := runTest(tt.given)
 			if got != tt.want {
@@ -78,7 +78,7 @@ func TestCases(t *testing.T) {
 
 func BenchmarkCases(b *testing.B) {
 	for n := 0; n < b.N; n++ {
-		for _, tt := range cases {
+		for _, tt := range tests {
 			runTest(tt.given)
 		}
 	}
