@@ -30,7 +30,7 @@ EOF
 
 ## _test.go
 test -f "$gotest" || cat <<EOF > "${gotest}"
-package leetcode$id
+package leetcode${id}
 
 import "testing"
 
@@ -39,36 +39,38 @@ type given struct {
 	target int
 }
 
-type want struct {
+type result struct {
 	int
 }
 
-func runTest(given given) want {
+func (tt *test) run() result {
 	got := ${func}(given.nums, given.target)
-	return want{got}
+	return result{got}
 }
 
-var tests = []test {
-	{
-		"example1",
-		given{
-			nums:   []int{4, 5},
-			target: 0,
-		},
-		want{4},
-	},
+var tests []test
+
+// Add example1
+func init() {
+	g := given{nums: []int{4, 5}, target: 0}
+	w := 4
+	tests = append(tests, test{
+		name: "example1",
+		given: g,
+		want: w,
+	})
 }
 
 type test struct {
 	name  string
 	given given
-	want  want
+	want  result
 }
 
 func TestCases(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := runTest(tt.given)
+			got := tt.run()
 			if got != tt.want {
 				t.Errorf("\ngot:   %#v\nwant:  %#v\n", got, tt.want)
 			}
