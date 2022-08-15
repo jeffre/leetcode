@@ -6,13 +6,13 @@ type given struct {
 	root *Node
 }
 
-type want struct {
+type result struct {
 	*Node
 }
 
-func runTest(given given) want {
-	got := connect(given.root)
-	return want{got}
+func (tt *test) run() result {
+	got := connect(tt.given.root)
+	return result{got}
 }
 
 var tests []test
@@ -35,7 +35,7 @@ func init() {
 		},
 	}
 
-	w := want{
+	w := result{
 		&Node{1,
 			&Node{2,
 				&Node{4, nil, nil, nil},
@@ -61,13 +61,13 @@ func init() {
 type test struct {
 	name  string
 	given given
-	want  want
+	want  result
 }
 
 func TestCases(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := runTest(tt.given)
+			got := tt.run()
 			if !assertIdentical(t, got.Node, tt.want.Node) {
 				t.Errorf("\ngot:   %#v\nwant:  %#v\n", got, tt.want)
 			}
@@ -78,7 +78,7 @@ func TestCases(t *testing.T) {
 func BenchmarkCases(b *testing.B) {
 	for n := 0; n < b.N; n++ {
 		for _, tt := range tests {
-			runTest(tt.given)
+			tt.run()
 		}
 	}
 }
