@@ -19,8 +19,9 @@ var tests []test
 
 // Add example1
 func init() {
-	g := given{
-		&Node{1,
+
+	common := func() *Node {
+		return &Node{1,
 			&Node{2,
 				&Node{4, nil, nil, nil},
 				&Node{5, nil, nil, nil},
@@ -32,24 +33,12 @@ func init() {
 				nil,
 			},
 			nil,
-		},
+		}
 	}
 
-	w := result{
-		&Node{1,
-			&Node{2,
-				&Node{4, nil, nil, nil},
-				&Node{5, nil, nil, nil},
-				nil,
-			},
-			&Node{3,
-				&Node{6, nil, nil, nil},
-				&Node{7, nil, nil, nil},
-				nil,
-			},
-			nil,
-		},
-	}
+	g := given{common()}
+	w := result{common()}
+
 	w.Left.Next = w.Right
 	w.Left.Left.Next = w.Left.Right
 	w.Left.Right.Next = w.Right.Left
