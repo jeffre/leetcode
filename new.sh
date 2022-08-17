@@ -43,8 +43,8 @@ type result struct {
 	int
 }
 
-func (tt *test) run() result {
-	got := ${func}(given.nums, given.target)
+func (t *test) run() result {
+	got := ${func}(t.given.nums, t.given.target)
 	return result{got}
 }
 
