@@ -9,11 +9,15 @@ package leetcode79
 	letter cell may not be used more than once.
 */
 
+type grid [][]byte
+
 func exist(board [][]byte, word string) bool {
 
-	for row := range board {
-		for col := range board[row] {
-			if backtrack(board, row, col, word) {
+	grid := grid(board)
+
+	for row := range grid {
+		for col := range grid[row] {
+			if grid.backtrack(row, col, word) {
 				return true
 			}
 		}
@@ -23,8 +27,8 @@ func exist(board [][]byte, word string) bool {
 	return false
 }
 
-func backtrack(board [][]byte, row, col int, suffix string) bool {
-	columns := len(board[0])
+func (g grid) backtrack(row, col int, suffix string) bool {
+	columns := len(g[0])
 
 	// base case for success
 	if len(suffix) == 0 {
@@ -32,31 +36,31 @@ func backtrack(board [][]byte, row, col int, suffix string) bool {
 	}
 
 	// check current status
-	if board[row][col] != suffix[0] {
+	if g[row][col] != suffix[0] {
 		return false
 	}
 
 	found := false
 
 	// temporary mask
-	board[row][col] = '#'
+	g[row][col] = '#'
 
-	for _, move := range neighbors(board, row, col) {
+	for _, move := range g.neighbors(row, col) {
 		r, c := move/columns, move%columns
-		found = backtrack(board, r, c, suffix[1:])
+		found = g.backtrack(r, c, suffix[1:])
 		if found {
 			break
 		}
 	}
 
 	// undo mask
-	board[row][col] = suffix[0]
+	g[row][col] = suffix[0]
 
 	return found
 }
 
-func neighbors(board [][]byte, r, c int) (loc []int) {
-	rows, columns := len(board), len(board[0])
+func (g grid) neighbors(r, c int) (loc []int) {
+	rows, columns := len(g), len(g[0])
 	dr := []int{-1, 0, 1, 0}
 	dc := []int{0, -1, 0, 1}
 	for i := 0; i < 4; i++ {
